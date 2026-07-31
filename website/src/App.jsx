@@ -9,9 +9,9 @@ import "flag-icons/css/flag-icons.min.css";
 import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { ChevronUpDownIcon } from '@heroicons/react/16/solid'
 import { CheckIcon } from '@heroicons/react/20/solid'
-import leagues from './../../leagues.json';
+import leagues from './../data/leagues.json';
 import { Select } from '@headlessui/react'
-import data from './../../players_stat.json';
+import data from './../data/players_stat.json';
 
 const languages = [
   {
