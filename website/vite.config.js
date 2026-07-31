@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(),
-    base: '/dota-fantasy-2026/'
+    tailwindcss()
   ],
+  base: '/dota-fantasy-2026/'
 })
