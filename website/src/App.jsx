@@ -316,7 +316,7 @@ function App() {
                       } />
                     </div>
                     {selectedOption[idx + (role * 3)] === 'watchers_taken'
-                      ? <p className='flex items-start gap-2 font-light max-w-70 text-white/70'>Watchers taken data is slightly higher. In 2025, the “Watchers Taken” statistic only includes NEUTRAL watchers taken, so enemy watchers taken by a player are not counted. This calculator counts both neutral and enemy watchers taken, which makes this statistic slightly higher.</p>
+                      ? <p className='flex items-start gap-2 font-light max-w-70 text-white/70'>Watchers Taken data is slightly higher. In the 2025 Fantasy Dota 2 stats, Valve counted only NEUTRAL watchers taken. I found data that includes both NEUTRAL and ENEMY watchers taken, so this calculator counts both. As a result, the “Watchers Taken” statistic here is not completely accurate and is slightly higher than the actual value.</p>
                       : ''
                     }
                   </div>
