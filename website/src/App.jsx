@@ -180,23 +180,23 @@ function App() {
   }
 
   return (
-    <div className='px-48 relative w-full bg-gray-950 min-h-screen flex flex-col'>
+    <div className='2xl:px-48 xl:px-36 lg:px-24 md:px-12 sm:px-8 px-4 relative w-full bg-gray-950 min-h-screen flex flex-col'>
       <header className='flex justify-between py-6 items-center w-full'>
         <div className='flex justify-between gap-4'>
           <a href="https://buymeacoffee.com/nineteenqq" target='_blank' rel="noopener noreferrer">
-            <img src={bmc} className='size-12 rounded-full' alt="Buy me a coffee"/>
+            <img src={bmc} className='size-10 xl:size-12 rounded-full' alt="Buy me a coffee"/>
           </a>
           <a href="https://steamcommunity.com/id/doodlehateu/" target='_blank' rel="noopener noreferrer">
-            <img src={steam} className='size-12 rounded-full' alt="Steam"/>
+            <img src={steam} className='size-10 xl:size-12 rounded-full' alt="Steam"/>
           </a>
           <a href="https://www.reddit.com/r/DotA2/comments/1vbt4z3/fantasy_calculator_2026/" target='_blank' rel="noopener noreferrer">
-            <img src={reddit} className='size-12 rounded-full' alt="Reddit"/>
+            <img src={reddit} className='size-10 xl:size-12 rounded-full' alt="Reddit"/>
           </a>
           <a href="https://github.com/bydoodle/dota2fantasy" target="_blank" rel="noopener noreferrer">
-            <img src={github} className="size-12 rounded-full" alt="" />
+            <img src={github} className="size-10 xl:size-12 rounded-full" alt="" />
           </a>
         </div>
-        <h1 className='absolute left-1/2 -translate-x-1/2'>
+        <h1 className='hidden 2xl:block 2xl:absolute 2xl:left-1/2 2xl:-translate-x-1/2'>
           Fantasy League Calculator 2026
         </h1>
         {/* <Listbox value={selectedLanguage} onChange={setSelectedLanguage}>
@@ -242,11 +242,11 @@ function App() {
         <h2>Select tournaments</h2>
         <p className='mt-2'>Choose tournaments you want to fetch data from</p>
       </div>
-      <section className='flex w-full justify-between mt-8 gap-4 pb-6'>
+      <section className='grid grid-cols-1 sm:grid-cols-2 xl:flex w-full xl:justify-between mt-8 gap-2 lg:gap-4 pb-6'>
         {Object.entries(leagues).map(([league, data]) => (
           <div key={league} className='relative bg-pink-950 p-4 rounded-lg flex w-full flex-col'>
             <article>
-              <div className='flex items-center'>
+              <div className='flex items-center justify-between'>
                 <label htmlFor={league} className='text-2xl font-bold'>
                   <input type="checkbox" name="" id={league} className='mr-2 size-5' checked={selectedTournaments.includes(league)} onChange={() =>
                     setSelectedTournaments(prev =>
@@ -255,7 +255,7 @@ function App() {
                         : [...prev, league]
                     )
                   } />
-                  {data.name}
+                  {data.short_name}
                 </label>
                 <a href={data.link} target='_blank' rel="noopener noreferrer">
                   <img src={external} alt="" className='size-5 invert ml-4' />
@@ -267,16 +267,16 @@ function App() {
         ))}
       </section>
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
-      <section className='relative w-full flex flex-col gap-4 items-center pt-6'>
+      <section className='relative w-full flex flex-col gap-4 items-center py-6'>
         <h2 className='text-white font-bold text-5xl'>Select your stats</h2>
-        <p className='text-white text-center mt-2'>Choose your stats and their multipliers <br />* Enter fraction instead of percents, for example if you have 270% multiplier enter 2.7 instead.</p>
+        <p className='text-white text-center mt-2'>Choose your stats and their multipliers <br /><span className='text-white/70'>* Enter fraction instead of percents, for example if you have 270% multiplier enter 2.7 instead.</span></p>
         {/* <button className='text-yellow-500 text-2xl absolute right-0 top-12 cursor-pointer' onClick={() => setIsHIW(true)}>How does it counts?</button> */}
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid grid-cols-1 xl:grid-cols-3 gap-4'>
           {Object.keys(roles).map((role, index) => (
             <div
             key={role}
             className='flex flex-col gap-2 p-4 bg-gradient-to-b from-purple-900 rounded-md to-transparent'>
-              <div className='flex justify-between gap-4'>
+              <div className='flex flex-col md:flex-row justify-between items-center md:items-start gap-4'>
                 <div className='w-[40%] flex flex-col mt-6 gap-6'>
                   <h2 className='text-center text-white text-5xl'>{{0: 'Core', 1: 'Mid', 2: 'Support'}[role]}</h2>
                 </div>
