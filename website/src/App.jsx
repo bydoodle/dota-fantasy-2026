@@ -4,6 +4,7 @@ import "flag-icons/css/flag-icons.min.css";
 import bmc from './assets/bmc-logo-yellow.png'
 import steam from "./assets/Steam_icon_logo.svg.png"
 import reddit from "./assets/reddit-logo.png"
+import github from "./assets/github-mark-white.png"
 import external from "./assets/external-link.png"
 import "flag-icons/css/flag-icons.min.css";
 import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
@@ -192,7 +193,7 @@ function App() {
             <img src={reddit} className='size-12 rounded-full' alt="Reddit"/>
           </a>
           <a href="https://github.com/bydoodle/dota2fantasy" target="_blank" rel="noopener noreferrer">
-            <img src="github-mark-white.png" className="h-14" alt="" />
+            <img src={github} className="size-12 rounded-full" alt="" />
           </a>
         </div>
         <h1 className='absolute left-1/2 -translate-x-1/2'>
