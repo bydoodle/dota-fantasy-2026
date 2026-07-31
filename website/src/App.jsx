@@ -13,7 +13,6 @@ import { CheckIcon } from '@heroicons/react/20/solid'
 import leagues from './../data/leagues.json';
 import { Select } from '@headlessui/react'
 import data from './../data/players_stat.json';
-import { CiCircleInfo } from "react-icons/ci";
 
 const languages = [
   {
