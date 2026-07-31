@@ -13,6 +13,7 @@ import { CheckIcon } from '@heroicons/react/20/solid'
 import leagues from './../data/leagues.json';
 import { Select } from '@headlessui/react'
 import data from './../data/players_stat.json';
+import { CiCircleInfo } from "react-icons/ci";
 
 const languages = [
   {
@@ -240,7 +241,7 @@ function App() {
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
       <div className='flex justidy-center items-center flex-col py-6'>
         <h2>Select tournaments</h2>
-        <p className='mt-2'>Choose tournaments you want to fetch data from</p>
+        <p className='mt-2 text-center'>Choose tournaments you want to fetch data from</p>
       </div>
       <section className='grid grid-cols-1 sm:grid-cols-2 xl:flex w-full xl:justify-between mt-8 gap-2 lg:gap-4 pb-6'>
         {Object.entries(leagues).map(([league, data]) => (
@@ -284,35 +285,41 @@ function App() {
                 {roles[role].map((color, idx) => (
                   <div
                   key={idx}
-                  className={`flex justify-between gap-2 ${backgrounds[color]} rounded-md px-4 py-6`}
+                  className={`flex flex-col gap-2 ${backgrounds[color]} rounded-md px-4 py-6`}
                   >
-                    <Select
-                    value={selectedOption[idx + (role * 3)] || ''}
-                    onChange={(e) => setSelectedOption(prev => {
-                      const updated = [...prev];
-                      updated[idx + (role * 3)] = e.target.value;
-                      return updated;
-                    })}
-                    className='w-[100%] p-1 rounded-sm text-black bg-white'
-                    >
-                      <option value="">None</option>
-                      {Object.keys(data.Xm[19696].stats[color]).map((stat, idx) => (
-                        <option key={`${idx}-${stat}`} value={stat || ''}>
-                          {stat.replace('_', ' ')}
-                        </option>
-                      ))}
-                    </Select>
-                      <input
-                    type="number"
-                    className='bg-white w-[30%] text-black rounded-sm p-1 focus:outline-none focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [appearance:textfield]'
-                    value={selectedMultiplier[idx + (role * 3)] || ''} 
-                    onChange={(e) =>
-                      setSelectedMultiplier(prev => {
+                    <div className='flex justify-between gap-2'>
+                      <Select
+                      value={selectedOption[idx + (role * 3)] || ''}
+                      onChange={(e) => setSelectedOption(prev => {
                         const updated = [...prev];
-                        updated[idx + (role * 3)] = Number(e.target.value);
+                        updated[idx + (role * 3)] = e.target.value;
                         return updated;
-                      })
-                    } />
+                      })}
+                      className='w-[100%] p-1 rounded-sm text-black bg-white'
+                      >
+                        <option value="">None</option>
+                        {Object.keys(data.Xm[19696].stats[color]).map((stat, idx) => (
+                          <option key={`${idx}-${stat}`} value={stat || ''} title={stat === 'watchers_taken' ? 'Watchers taken data ' : ''}>
+                            {stat.replace('_', ' ')}
+                          </option>
+                        ))}
+                      </Select>
+                        <input
+                      type="number"
+                      className='bg-white w-[30%] text-black rounded-sm p-1 focus:outline-none focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [appearance:textfield]'
+                      value={selectedMultiplier[idx + (role * 3)] || ''} 
+                      onChange={(e) =>
+                        setSelectedMultiplier(prev => {
+                          const updated = [...prev];
+                          updated[idx + (role * 3)] = Number(e.target.value);
+                          return updated;
+                        })
+                      } />
+                    </div>
+                    {selectedOption[idx + (role * 3)] === 'watchers_taken'
+                      ? <p className='flex items-start gap-2 font-light max-w-70 text-white/70'>Watchers taken data is slightly higher. In 2025, the “Watchers Taken” statistic only includes NEUTRAL watchers taken, so enemy watchers taken by a player are not counted. This calculator counts both neutral and enemy watchers taken, which makes this statistic slightly higher.</p>
+                      : ''
+                    }
                   </div>
                 ))}
                 </div>
