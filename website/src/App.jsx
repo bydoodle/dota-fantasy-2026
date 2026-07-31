@@ -188,7 +188,7 @@ function App() {
           <a href="https://steamcommunity.com/id/doodlehateu/" target='_blank' rel="noopener noreferrer">
             <img src={steam} className='size-12 rounded-full' alt="Steam"/>
           </a>
-          <a href="https://www.reddit.com/user/Winter-Still-3072/" target='_blank' rel="noopener noreferrer">
+          <a href="https://www.reddit.com/r/DotA2/comments/1vbt4z3/fantasy_calculator_2026/" target='_blank' rel="noopener noreferrer">
             <img src={reddit} className='size-12 rounded-full' alt="Reddit"/>
           </a>
         </div>
