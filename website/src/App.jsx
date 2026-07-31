@@ -191,6 +191,9 @@ function App() {
           <a href="https://www.reddit.com/r/DotA2/comments/1vbt4z3/fantasy_calculator_2026/" target='_blank' rel="noopener noreferrer">
             <img src={reddit} className='size-12 rounded-full' alt="Reddit"/>
           </a>
+          <a href="https://github.com/bydoodle/dota2fantasy" target="_blank" rel="noopener noreferrer">
+            <img src="github-mark-white.png" className="h-14" alt="" />
+          </a>
         </div>
         <h1 className='absolute left-1/2 -translate-x-1/2'>
           Fantasy League Calculator 2026
