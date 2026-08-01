@@ -13,49 +13,44 @@ import { CheckIcon } from '@heroicons/react/20/solid'
 import leagues from './../data/leagues.json';
 import { Select } from '@headlessui/react'
 import data from './../data/players_stat.json';
+import { useTranslation } from 'react-i18next';
 
 const languages = [
   {
     id: 1,
-    name: 'En',
+    name: 'en',
     img:
       'fi-gb-eng',
   },
   {
     id: 2,
-    name: 'Cn',
+    name: 'cn',
     img:
       'fi-cn',
   },
   {
     id: 3,
-    name: 'Es',
+    name: 'es',
     img:
       'fi-es',
   },
   {
     id: 4,
-    name: 'Pt',
+    name: 'pt',
     img:
       'fi-pt',
   },
   {
     id: 5,
-    name: 'Ua',
+    name: 'ua',
     img:
       'fi-ua',
   },
   {
     id: 6,
-    name: 'Vn',
+    name: 'vn',
     img:
       'fi-vn',
-  },
-  {
-    id: 7,
-    name: 'Id',
-    img:
-      'fi-id',
   },
 ]
 
@@ -64,6 +59,12 @@ const roles = {
     1: ['red', 'blue', 'green'],
     2: ['blue', 'green', 'blue']
   }
+
+const roleNames = {
+  0: 'roles.core',
+  1: 'roles.mid',
+  2: 'roles.support',
+};
 
 const backgrounds = {
   red: "bg-red-500/40",
@@ -92,10 +93,19 @@ const multipliers = {
   }
 
 function App() {
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[3])
   const [selectedOption, setSelectedOption] = useState([null, null, null, null, null, null, null, null, null]);
   const [selectedMultiplier, setSelectedMultiplier] = useState([1, 1, 1, 1, 1, 1, 1, 1, 1]);
   const [selectedTournaments, setSelectedTournaments] = useState(Object.keys(leagues));
+  const { t, i18n } = useTranslation();
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    languages.find(lang => lang.name === i18n.language) || languages[0]
+  );
+
+  const handleLanguageChange = (language) => {
+    setSelectedLanguage(language);
+    i18n.changeLanguage(language.name);
+    localStorage.setItem('language', language.name);
+  }
 
   const getPlayers = (role) => {
     const players = Object.entries(data)
@@ -199,7 +209,7 @@ function App() {
         <h1 className='hidden 2xl:block 2xl:absolute 2xl:left-1/2 2xl:-translate-x-1/2'>
           Fantasy League Calculator 2026
         </h1>
-        {/* <Listbox value={selectedLanguage} onChange={setSelectedLanguage}>
+        <Listbox value={selectedLanguage} onChange={handleLanguageChange}>
           <Label className="block text-sm/6 font-medium text-white"></Label>
           <div className="relative mt-2">
             <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-gray-800/50 py-1.5 pr-2 pl-3 text-left text-white outline-1 -outline-offset-1 outline-white/10 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-500 sm:text-sm/6">
@@ -224,7 +234,7 @@ function App() {
                   className="group relative cursor-default py-2 pr-9 pl-3 text-white select-none data-focus:bg-indigo-500 data-focus:outline-hidden"
                 >
                   <div className="flex items-center">
-                    <span class={`size-5 shrink-0 fi ${language.img}`}></span>
+                    <span className={`size-5 shrink-0 fi ${language.img}`}></span>
                     <span className="ml-3 block font-normal group-data-selectedLanguage:font-semibold">{language.name.toUpperCase()}</span>
                   </div>
 
@@ -235,12 +245,12 @@ function App() {
               ))}
             </ListboxOptions>
           </div>
-        </Listbox> */}
+        </Listbox>
       </header>
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
       <div className='flex justidy-center items-center flex-col py-6'>
-        <h2>Select tournaments</h2>
-        <p className='mt-2 text-center'>Choose tournaments you want to fetch data from</p>
+        <h2>{t('select-tournaments')}</h2>
+        <p className='mt-2 text-center'>{t('select-tournaments-desc')}</p>
       </div>
       <section className='grid grid-cols-1 sm:grid-cols-2 xl:flex w-full xl:justify-between mt-8 gap-2 lg:gap-4 pb-6'>
         {Object.entries(leagues).map(([league, data]) => (
@@ -261,15 +271,15 @@ function App() {
                   <img src={external} alt="" className='size-5 invert ml-4' />
                 </a>
               </div>
-              <p className='font-bold mt-2'>Total matches parsed: {data.total_matches_parsed}</p>
+              <p className='font-bold mt-2'>{t('total-matches-parsed')} {data.total_matches_parsed}</p>
             </article>
           </div>
         ))}
       </section>
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
       <section className='relative w-full flex flex-col gap-4 items-center py-6'>
-        <h2 className='text-white font-bold text-5xl'>Select your stats</h2>
-        <p className='text-white text-center mt-2'>Choose your stats and their multipliers <br /><span className='text-white/70'>* Enter fraction instead of percents, for example if you have 270% multiplier enter 2.7 instead.</span></p>
+        <h2 className='text-white font-bold text-5xl'>{t('select-your-stats')}</h2>
+        <p className='text-white text-center mt-2'>{t('select-your-stats-desc')} <br /><span className='text-white/70'>{t('select-your-stats-instruction')}</span></p>
         {/* <button className='text-yellow-500 text-2xl absolute right-0 top-12 cursor-pointer' onClick={() => setIsHIW(true)}>How does it counts?</button> */}
         <div className='grid grid-cols-1 xl:grid-cols-3 gap-4'>
           {Object.keys(roles).map((role, index) => (
@@ -277,8 +287,8 @@ function App() {
             key={role}
             className='flex flex-col gap-2 p-4 bg-gradient-to-b from-purple-900 rounded-md to-transparent'>
               <div className='flex flex-col md:flex-row justify-between items-center md:items-start gap-4'>
-                <div className='w-[40%] flex flex-col mt-6 gap-6'>
-                  <h2 className='text-center text-white text-5xl'>{{0: 'Core', 1: 'Mid', 2: 'Support'}[role]}</h2>
+                <div className='w-[30%] text-center items-center flex justify-center flex-col h-full gap-6'>
+                  <h2 className='text-center text-white text-5xl md:-rotate-90'>{t(roleNames[role])}</h2>
                 </div>
                 <div className='flex flex-col gap-2'>
                 {roles[role].map((color, idx) => (
@@ -296,10 +306,10 @@ function App() {
                       })}
                       className='w-[100%] p-1 rounded-sm text-black bg-white'
                       >
-                        <option value="">None</option>
+                        <option value="">{t('none')}</option>
                         {Object.keys(data.Xm[19696].stats[color]).map((stat, idx) => (
                           <option key={`${idx}-${stat}`} value={stat || ''} title={stat === 'watchers_taken' ? 'Watchers taken data ' : ''}>
-                            {stat.replace('_', ' ')}
+                            {t(stat)}
                           </option>
                         ))}
                       </Select>
@@ -316,15 +326,17 @@ function App() {
                       } />
                     </div>
                     {selectedOption[idx + (role * 3)] === 'watchers_taken'
-                      ? <p className='flex items-start gap-2 font-light max-w-70 text-white/70'>Watchers Taken data is slightly higher. In the 2025 Fantasy Dota 2 stats, Valve counted only NEUTRAL watchers taken. I found data that includes both NEUTRAL and ENEMY watchers taken, so this calculator counts both. As a result, the “Watchers Taken” statistic here is not completely accurate and is slightly higher than the actual value.</p>
-                      : ''
+                      ? <p className='flex items-start gap-2 font-light max-w-70 text-white/70'>{t('watchers-taken-desc')}</p>
+                      : (selectedOption[idx + (role * 3)] === 'lotuses_grabbed' || selectedOption[idx + (role * 3)] === 'madstone_collected'
+                        ? <p className='flex items-start gap-2 font-light max-w-70 text-white/70'>{t('no-data-desc')}</p>
+                        : '')
                     }
                   </div>
                 ))}
                 </div>
               </div>
               <div className='flex flex-col items-center'>
-                <h6 className="text-white text-3xl my-4">Best players:</h6>
+                <h6 className="text-white text-3xl my-4">{t('best-players')}</h6>
                 <ul className='text-white flex flex-col w-full gap-x-8'>
                   {getPlayers(role).map(({ teamLogo, total, players }) => (
                     <li
