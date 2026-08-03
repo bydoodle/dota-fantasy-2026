@@ -52,6 +52,18 @@ const languages = [
     img:
       'fi-vn',
   },
+  {
+    id: 7,
+    name: 'pl',
+    img:
+      'fi-pl',
+  },
+  {
+    id: 8,
+    name: 'de',
+    img:
+      'fi-de',
+  },
 ]
 
 const roles = {
