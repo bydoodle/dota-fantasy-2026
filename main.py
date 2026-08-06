@@ -79,9 +79,6 @@ PLAYERS_LIST = {
     'Ace ♠': {
         'pos': 0
     },
-    'Saksa': {
-        'pos': 2
-    },
     'Boxi': {
         'pos': 2
     },
@@ -184,6 +181,9 @@ PLAYERS_LIST = {
     'RESPECT': {
         'pos': 2
     },
+    'sayuw': {
+        'pos': 2
+    },
 # # Team Resilience
 
 # # Vici Gaming
@@ -252,6 +252,9 @@ PLAYERS_LIST = {
     },
 }
 
+with open("heroes.json", "r", encoding="utf-8") as f:
+    heroes_data = json.load(f)
+
 with open("leagues.json", "r", encoding="utf-8") as f:
     leagues_data = json.load(f)
 
@@ -270,6 +273,7 @@ def addPlayerFields(league_id, player, match_r):
     if league_id not in player_stat[player['name']]:
         player_stat[player['name']][league_id] = {
             "stats": {},
+            "prefixes": {}
         }
 
         if "general" not in player_stat[player['name']]:
@@ -305,6 +309,17 @@ def addPlayerFields(league_id, player, match_r):
                 "tormentor_kills": [],
                 "firstblood": [],
             }
+
+        player_stat[player['name']][league_id]['prefixes'] = {
+            "green": 0,
+            "blue": 0,
+            "red": 0,
+            "purple": 0,
+            "yellow": 0,
+            "caped": 0,
+            "undead": 0,
+            "aquatic": 0
+        }
 
 for league_id in leagues_ids:
     matches = requests.get(f"https://api.opendota.com/api/leagues/{league_id}/matches").json()
@@ -375,6 +390,30 @@ for league_id in leagues_ids:
                         player_stat[player['name']][league_id]['stats']['green']['courier_kills'].append(player['courier_kills'])
                         player_stat[player['name']][league_id]['stats']['green']['firstblood'].append(player['firstblood_claimed'])
                         player_stat[player['name']][league_id]['stats']['green']['tormentor_kills'].append(player.get('killed', {}).get('npc_dota_miniboss', 0))
+
+                if heroes_data[str(player['hero_id'])]['isgreen']:
+                    player_stat[player['name']][league_id]['prefixes']['green'] += 1
+
+                if heroes_data[str(player['hero_id'])]['isblue']:
+                    player_stat[player['name']][league_id]['prefixes']['blue'] += 1
+
+                if heroes_data[str(player['hero_id'])]['isred']:
+                    player_stat[player['name']][league_id]['prefixes']['red'] += 1
+
+                if heroes_data[str(player['hero_id'])]['ispurple']:
+                    player_stat[player['name']][league_id]['prefixes']['purple'] += 1
+
+                if heroes_data[str(player['hero_id'])]['isyellow']:
+                    player_stat[player['name']][league_id]['prefixes']['yellow'] += 1
+
+                if heroes_data[str(player['hero_id'])]['iscaped']:
+                    player_stat[player['name']][league_id]['prefixes']['caped'] += 1
+
+                if heroes_data[str(player['hero_id'])]['isundead']:
+                    player_stat[player['name']][league_id]['prefixes']['undead'] += 1
+
+                if heroes_data[str(player['hero_id'])]['isaquatic']:
+                    player_stat[player['name']][league_id]['prefixes']['aquatic'] += 1
 
     leagues_data[str(league_id)]['total_matches_parsed'] = total_matches_count
 

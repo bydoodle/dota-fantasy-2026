@@ -22,5 +22,11 @@
         "short_name": "EWC 2026",
         "link": "https://liquipedia.net/dota2/Esports_World_Cup/2026",
         "total_matches_parsed": 142
+    },
+    "20009": {
+        "name": "1win Essence II",
+        "short_name": "1win Essence II",
+        "link": "https://liquipedia.net/dota2/1win_Essence/2",
+        "total_matches_parsed": 60
     }
 }
