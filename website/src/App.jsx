@@ -433,6 +433,22 @@ function StatsTable({ rows, statFilter, onStatClick, t }) {
   )
 }
 
+function PrefixesSection() {
+  return (
+    selectedTournaments.map((el) => (
+      <span>
+        {el}
+      </span>
+    ))
+    // (ROLE_KEYS)
+    //   .map((e) => 
+    //   (<span className='text-16 text-white'>
+    //     {e}
+    //   </span>)
+    // )
+  )
+}
+
 // ---------------------------------------------------------------------------
 // App
 // ---------------------------------------------------------------------------
@@ -570,6 +586,16 @@ function App() {
             t={t}
           />
         ))}
+      </section>
+
+      <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+
+      <div className='flex justify-center items-center flex-col py-6'>
+        <h2>{t('prefixes-suggestions')}</h2>
+        <p className="mt-2 text-center">{t('prefixes-suggestions-desc')}</p>
+      </div>
+      <section className=''>
+        {PrefixesSection()}
       </section>
 
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
