@@ -97,6 +97,45 @@ const MAX_DEATH_SCORE = 1950
 
 const ROLE_KEYS = Object.keys(ROLE_SLOT_COLORS) // ['0', '1', '2']
 
+// Flat bonus each hero-prefix grants when picked, as a fraction (6% -> 0.06).
+const PREFIX_BONUSES = {
+  red: 0.06,
+  blue: 0.11,
+  green: 0.06,
+  purple: 0.1,
+  yellow: 0.08,
+  aquatic: 0.08,
+  undead: 0.07,
+  caped: 0.09,
+}
+
+const PREFIX_KEYS = Object.keys(PREFIX_BONUSES)
+
+// Display names + explanatory text shown to the user - PREFIX_BONUSES above
+// stays the source of truth for the actual numbers used in calculations.
+const PREFIX_INFO = {
+  red: { name: 'Crimson', description: '+6% when playing a red hero' },
+  blue: { name: 'Cerulean', description: '+11% when playing a blue hero' },
+  green: { name: 'Emerald', description: '+6% when playing a green hero' },
+  purple: { name: 'Royal', description: '+10% when playing a purple hero' },
+  yellow: { name: 'Golden', description: '+8% when playing a yellow or brown hero' },
+  aquatic: { name: 'Elemental', description: '+8% when playing an Aquatic, Fiery, or Icy Hero' },
+  undead: { name: 'Otherworldly', description: '+7% when playing an Undead, Demon, or Spirit Hero' },
+  caped: { name: 'Heroic', description: '+9% when playing a Caped or Masked Hero' },
+}
+
+// Player-facing name + rule text for each raw prefix key.
+const PREFIX_DISPLAY = {
+  red: { name: 'Crimson', desc: '+6% when playing a red hero' },
+  blue: { name: 'Cerulean', desc: '+11% when playing a blue hero' },
+  green: { name: 'Emerald', desc: '+6% when playing a green hero' },
+  purple: { name: 'Royal', desc: '+10% when playing a purple hero' },
+  yellow: { name: 'Golden', desc: '+8% when playing a yellow or brown hero' },
+  aquatic: { name: 'Elemental', desc: '+8% when playing an Aquatic, Fiery, or Icy Hero' },
+  undead: { name: 'Otherworldly', desc: '+7% when playing an Undead, Demon, or Spirit Hero' },
+  caped: { name: 'Heroic', desc: '+9% when playing a Caped or Masked Hero' },
+}
+
 // ---------------------------------------------------------------------------
 // Pure helpers (kept outside the component so they don't get recreated
 // every render)
@@ -174,6 +213,113 @@ function rankPlayersForRole({ role, slotStats, slotMultipliers, selectedTourname
     }))
     .sort((a, b) => b.total - a.total)
     .slice(0, 16)
+}
+
+/**
+ * All teammate pairs (same pos + same team_logo) for a given role position.
+ * Deliberately independent from selectedTournaments/selectedOption - it's
+ * pure roster data, not tied to the "select your stats" section or the
+ * stats table below.
+ */
+function getTeamPairsForPos(pos) {
+  const groups = {}
+
+  Object.entries(playersData).forEach(([name, info]) => {
+    if (info.general?.pos !== pos) return
+    const key = info.general?.team_logo ?? name
+    if (!groups[key]) groups[key] = { teamLogo: info.general?.team_logo, players: [] }
+    groups[key].players.push(name)
+  })
+
+  return Object.values(groups).map((group) => ({
+    key: group.teamLogo ?? group.players.join('-'),
+    teamLogo: group.teamLogo,
+    players: group.players,
+    label: group.players.join(' & '),
+  }))
+}
+
+// Precomputed once at module load - playersData is a static import, so this
+// never needs to change at runtime.
+const TEAM_PAIRS_BY_ROLE = Object.fromEntries(ROLE_KEYS.map((role) => [role, getTeamPairsForPos(Number(role))]))
+
+/** How many games a player has recorded in one tournament entry. */
+function getGamesPlayed(tournamentEntry) {
+  if (!tournamentEntry?.stats) return 0
+  return Object.values(tournamentEntry.stats).reduce((max, group) => {
+    const groupMax = Object.values(group).reduce((m, arr) => Math.max(m, arr.length), 0)
+    return Math.max(max, groupMax)
+  }, 0)
+}
+
+/**
+ * For one player, across the selected tournaments: what fraction of their
+ * games were on a hero with each prefix. Counts and game totals are summed
+ * across tournaments first, then divided once, so a tournament with more
+ * games naturally carries more weight.
+ */
+function getPlayerPrefixPercents(playerData, selectedTournaments) {
+  if (!playerData) return null
+
+  const counts = Object.fromEntries(PREFIX_KEYS.map((prefix) => [prefix, 0]))
+  let totalGames = 0
+
+  selectedTournaments.forEach((tournamentId) => {
+    const entry = playerData[tournamentId]
+    if (!entry) return
+    totalGames += getGamesPlayed(entry)
+    PREFIX_KEYS.forEach((prefix) => {
+      counts[prefix] += entry.prefixes?.[prefix] ?? 0
+    })
+  })
+
+  if (!totalGames) return null
+
+  const percents = Object.fromEntries(PREFIX_KEYS.map((prefix) => [prefix, counts[prefix] / totalGames]))
+  return { totalGames, percents }
+}
+
+/**
+ * Per-prefix expected bonus for one team pair (average of both teammates -
+ * same "sum / pair size" pattern used elsewhere), as a lookup map rather
+ * than a sorted list, since this now feeds into a combined calculation
+ * instead of being displayed on its own.
+ */
+function getPairPrefixBonusMap(playerNames, selectedTournaments) {
+  const perPlayer = playerNames.map((name) => getPlayerPrefixPercents(playersData[name], selectedTournaments))
+  const hasData = perPlayer.some((p) => p !== null)
+
+  const map = Object.fromEntries(
+    PREFIX_KEYS.map((prefix) => {
+      const contributions = perPlayer.map((p) => (p ? p.percents[prefix] * PREFIX_BONUSES[prefix] : 0))
+      return [prefix, contributions.reduce((a, b) => a + b, 0) / playerNames.length]
+    })
+  )
+
+  return { map, hasData }
+}
+
+/**
+ * Combines the 3 selected pairs (one per role) into a single ranking: each
+ * role's expected bonus per prefix is summed, then always divided by 3 -
+ * an unfilled role simply contributes 0, it isn't excluded from the divisor.
+ */
+function getCombinedPrefixRanking(selectedPairKeysByRole, selectedTournaments) {
+  const perRole = ROLE_KEYS.map((role) => {
+    const pairKey = selectedPairKeysByRole[Number(role)]
+    const pair = TEAM_PAIRS_BY_ROLE[role].find((p) => p.key === pairKey)
+    if (!pair) return null
+    return getPairPrefixBonusMap(pair.players, selectedTournaments)
+  })
+
+  const anySelected = perRole.some((r) => r !== null)
+
+  const ranking = PREFIX_KEYS.map((prefix) => {
+    const sum = perRole.reduce((acc, r) => acc + (r ? r.map[prefix] : 0), 0)
+    return { prefix, expectedBonus: sum / ROLE_KEYS.length }
+  }).sort((a, b) => b.expectedBonus - a.expectedBonus)
+
+  return { ranking, anySelected }
 }
 
 // ---------------------------------------------------------------------------
@@ -360,6 +506,62 @@ function RoleColumn({ role, selectedOption, setSelectedOption, selectedMultiplie
   )
 }
 
+function RolePairSelect({ role, selectedPairKey, onSelectPair, t }) {
+  const pairs = TEAM_PAIRS_BY_ROLE[role]
+
+  return (
+    <div className="flex flex-col gap-3 p-4 rounded-md bg-gradient-to-b from-purple-900 to-transparent w-100">
+      <h3 className="text-white text-2xl text-center">{t(ROLE_NAME_KEYS[role])}</h3>
+
+      <Select
+        value={selectedPairKey}
+        onChange={(e) => onSelectPair(e.target.value)}
+        className="p-1 rounded-sm text-black bg-white"
+        aria-label="Team pair"
+      >
+        <option value="">{t('none')}</option>
+        {pairs.map((pair) => (
+          <option key={pair.key} value={pair.key}>
+            {pair.label}
+          </option>
+        ))}
+      </Select>
+    </div>
+  )
+}
+
+function PrefixRankingSummary({ ranking, anySelected, t }) {
+  if (!anySelected) {
+    return (
+      <p className="text-white/70 text-center">
+        {t('prefixes-select-teams-hint', 'Pick a team pair for at least one role above to see suggestions.')}
+      </p>
+    )
+  }
+
+  return (
+    <ul className="text-white flex flex-col gap-2 w-100 mx-auto">
+      {ranking.map(({ prefix, expectedBonus }, idx) => {
+        const info = PREFIX_INFO[prefix]
+        return (
+          <li
+            key={prefix}
+            className={`flex justify-between items-center gap-4 px-4 py-2 rounded-md ${
+              idx === 0 ? 'bg-yellow-400/20 text-yellow-300' : 'bg-white/5'
+            }`}
+          >
+            <div>
+              <div className="font-semibold">{t(`prefix.${prefix}.name`, info.name)}</div>
+              <div className="text-sm text-white/60">{t(`prefix.${prefix}.desc`, info.description)}</div>
+            </div>
+            <span className="text-lg font-bold tabular-nums">{(expectedBonus * 100).toFixed(2)}%</span>
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
 function RoleFilterCheckboxes({ selectedRoles, onToggle, t }) {
   return (
     <div className="flex flex-wrap gap-6 text-white py-4">
@@ -433,22 +635,6 @@ function StatsTable({ rows, statFilter, onStatClick, t }) {
   )
 }
 
-// function PrefixesSection() {
-//   return (
-//     selectedTournaments.map((el) => (
-//       <span>
-//         {el}
-//       </span>
-//     ))
-//     // (ROLE_KEYS)
-//     //   .map((e) => 
-//     //   (<span className='text-16 text-white'>
-//     //     {e}
-//     //   </span>)
-//     // )
-//   )
-// }
-
 // ---------------------------------------------------------------------------
 // App
 // ---------------------------------------------------------------------------
@@ -459,6 +645,7 @@ function App() {
   const [selectedTournaments, setSelectedTournaments] = useState(Object.keys(leagues))
   const [selectedRoles, setSelectedRoles] = useState([0, 1, 2])
   const [statFilter, setStatFilter] = useState('')
+  const [selectedPrefixPairs, setSelectedPrefixPairs] = useState(Array(ROLE_KEYS.length).fill(''))
   const { t, i18n } = useTranslation()
   const [selectedLanguage, setSelectedLanguage] = useState(
     languages.find((lang) => lang.name === i18n.language) || languages[0]
@@ -486,6 +673,21 @@ function App() {
   const handleStatClick = useCallback((stat) => {
     setStatFilter((prev) => (prev === stat ? '' : stat))
   }, [])
+
+  const handleSelectPrefixPair = useCallback((role, key) => {
+    setSelectedPrefixPairs((prev) => {
+      const updated = [...prev]
+      updated[Number(role)] = key
+      return updated
+    })
+  }, [])
+
+  // Combines all 3 selected role pairs into one ranking (sum across roles,
+  // always divided by 3 - see getCombinedPrefixRanking).
+  const combinedPrefixRanking = useMemo(
+    () => getCombinedPrefixRanking(selectedPrefixPairs, selectedTournaments),
+    [selectedPrefixPairs, selectedTournaments]
+  )
 
   // Best-players ranking per role, recomputed only when the inputs that
   // actually affect it change (previously this ran on every render,
@@ -588,15 +790,29 @@ function App() {
         ))}
       </section>
 
-      {/* <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+      <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
-      <div className='flex justify-center items-center flex-col py-6'>
+      <div className="flex justify-center items-center flex-col py-6">
         <h2>{t('prefixes-suggestions')}</h2>
         <p className="mt-2 text-center">{t('prefixes-suggestions-desc')}</p>
       </div>
-      <section className=''>
-        {PrefixesSection()}
-      </section> */}
+
+      <section className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-4 mb-20">
+        <div className='flex flex-col gap-4'>
+          {ROLE_KEYS.map((role) => (
+            <RolePairSelect
+              key={role}
+              role={role}
+              selectedPairKey={selectedPrefixPairs[Number(role)]}
+              onSelectPair={(key) => handleSelectPrefixPair(role, key)}
+              t={t}
+            />
+          ))}
+        </div>
+        <div>
+          <PrefixRankingSummary ranking={combinedPrefixRanking.ranking} anySelected={combinedPrefixRanking.anySelected} t={t} />
+        </div>
+      </section>
 
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
