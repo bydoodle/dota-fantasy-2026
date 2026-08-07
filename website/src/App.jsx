@@ -528,7 +528,7 @@ function PrefixRankingSummary({ ranking, anySelected, t }) {
   }
 
   return (
-    <ul className="text-white grid grid-cols-1 md:grid-cols-2 gap-2 w-full mx-auto">
+    <ul className="text-white grid grid-cols-1 md:grid-cols-2 h-full p-2 grid-rows-8 md:grid-rows-4 gap-2 w-full mx-auto grid-flow-col md:grid-flow-col">
       {ranking.map(({ prefix, expectedBonus }, idx) => {
         const info = PREFIX_INFO[prefix]
         return (
@@ -552,7 +552,7 @@ function PrefixRankingSummary({ ranking, anySelected, t }) {
 
 function RoleFilterCheckboxes({ selectedRoles, onToggle, t }) {
   return (
-    <div className="flex flex-wrap gap-6 text-white py-4">
+    <div className="flex gap-6 text-white py-4 px-8 justify-center rounded-lg bg-taupe-700/50 w-min text-xl">
       {ROLE_KEYS.map((role) => (
         <label key={role} className="flex items-center gap-2 cursor-pointer">
           <input
@@ -581,7 +581,7 @@ function StatsTable({ rows, statFilter, onStatClick, t }) {
       <table className="text-sm border-collapse" style={{ minWidth: '1500px' }}>
         <thead className="bg-gray-950">
           <tr>
-            <th className="sticky left-0 z-20 bg-gray-950 min-w-50 px-2"></th>
+            <th className="sticky left-0 z-20 bg-gray-950 px-2"></th>
             {TABLE_STATS.map((stat) => (
               <th
                 key={stat}
@@ -599,7 +599,7 @@ function StatsTable({ rows, statFilter, onStatClick, t }) {
         <tbody className="divide-y divide-neutral-800 border border-white/10">
           {rows.map((row) => (
             <tr key={row.key} className="hover:bg-neutral-900/60 group">
-              <th className="sticky left-0 z-10 bg-gray-950 group-hover:bg-neutral-900 px-2 py-2 text-left whitespace-nowrap font-bold min-w-[170px]">
+              <th className="sticky left-0 z-10 bg-gray-950 group-hover:bg-neutral-900 px-2 py-2 text-left whitespace-normal xl:whitespace-nowrap font-bold w-20 xl:w-40">
                 <div className="flex items-center gap-2">
                   {row.teamLogo && <img src={row.teamLogo} alt="" className="w-5 h-5 object-contain shrink-0" />}
                   <span>{row.label}</span>
@@ -780,7 +780,7 @@ function App() {
 
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
-      <div className="flex justify-center items-center flex-col py-6">
+      <div className="flex justify-center items-center text-center flex-col py-6">
         <h2>{t('prefixes-suggestions')}</h2>
         <p className="mt-2 text-center">{t('prefixes-suggestions-desc')}</p>
       </div>
@@ -797,14 +797,14 @@ function App() {
             />
           ))}
         </div>
-        <div>
+        <div className='w-full h-124 md:h-92 flex items-center justify-center border border-white/10 rounded-lg'>
           <PrefixRankingSummary ranking={combinedPrefixRanking.ranking} anySelected={combinedPrefixRanking.anySelected} t={t} />
         </div>
       </section>
 
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
-      <section className="relative w-full flex flex-col gap-4 items-center py-6">
+      <section className="relative w-full flex flex-col gap-4 items-center text-center py-6">
         <h2 className="text-white font-bold text-5xl">{t('select-your-stats')}</h2>
         <p className="text-white text-center mt-2">
           {t('select-your-stats-desc')} <br />
@@ -827,7 +827,7 @@ function App() {
         </div>
       </section>
 
-      <section>
+      <section className='flex flex-col items-center justify-center'>
         <RoleFilterCheckboxes selectedRoles={selectedRoles} onToggle={handleRoleFilterChange} t={t} />
 
         <StatsTable rows={filteredTableRows} statFilter={statFilter} onStatClick={handleStatClick} t={t} />
