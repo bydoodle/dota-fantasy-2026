@@ -124,18 +124,6 @@ const PREFIX_INFO = {
   caped: { name: 'Heroic', description: '+9% when playing a Caped or Masked Hero' },
 }
 
-// Player-facing name + rule text for each raw prefix key.
-const PREFIX_DISPLAY = {
-  red: { name: 'Crimson', desc: '+6% when playing a red hero' },
-  blue: { name: 'Cerulean', desc: '+11% when playing a blue hero' },
-  green: { name: 'Emerald', desc: '+6% when playing a green hero' },
-  purple: { name: 'Royal', desc: '+10% when playing a purple hero' },
-  yellow: { name: 'Golden', desc: '+8% when playing a yellow or brown hero' },
-  aquatic: { name: 'Elemental', desc: '+8% when playing an Aquatic, Fiery, or Icy Hero' },
-  undead: { name: 'Otherworldly', desc: '+7% when playing an Undead, Demon, or Spirit Hero' },
-  caped: { name: 'Heroic', desc: '+9% when playing a Caped or Masked Hero' },
-}
-
 // ---------------------------------------------------------------------------
 // Pure helpers (kept outside the component so they don't get recreated
 // every render)
@@ -510,7 +498,7 @@ function RolePairSelect({ role, selectedPairKey, onSelectPair, t }) {
   const pairs = TEAM_PAIRS_BY_ROLE[role]
 
   return (
-    <div className="flex flex-col gap-3 p-4 rounded-md bg-gradient-to-b from-purple-900 to-transparent w-100">
+    <div className="flex flex-col gap-3 p-4 rounded-md bg-gradient-to-b from-purple-900 to-transparent max-w-full w-100">
       <h3 className="text-white text-2xl text-center">{t(ROLE_NAME_KEYS[role])}</h3>
 
       <Select
@@ -540,7 +528,7 @@ function PrefixRankingSummary({ ranking, anySelected, t }) {
   }
 
   return (
-    <ul className="text-white flex flex-col gap-2 w-100 mx-auto">
+    <ul className="text-white grid grid-cols-1 md:grid-cols-2 gap-2 w-full mx-auto">
       {ranking.map(({ prefix, expectedBonus }, idx) => {
         const info = PREFIX_INFO[prefix]
         return (
@@ -797,8 +785,8 @@ function App() {
         <p className="mt-2 text-center">{t('prefixes-suggestions-desc')}</p>
       </div>
 
-      <section className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-4 mb-20">
-        <div className='flex flex-col gap-4'>
+      <section className="flex flex-col xl:flex-row justify-center items-center xl:items-start gap-4 mb-8">
+        <div className='flex flex-col items-center gap-4 mb-8 w-full xl:w-min'>
           {ROLE_KEYS.map((role) => (
             <RolePairSelect
               key={role}
