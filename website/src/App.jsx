@@ -20,7 +20,7 @@ import playersData from './../data/players_stat.json'
 // ---------------------------------------------------------------------------
 
 const languages = [
-  { id: 1, name: 'en', img: 'fi-gb-eng' },
+  { id: 1, name: 'en', img: 'fi-gb' },
   { id: 2, name: 'cn', img: 'fi-cn' },
   { id: 3, name: 'es', img: 'fi-es' },
   { id: 4, name: 'pt', img: 'fi-pt' },
@@ -552,7 +552,7 @@ function PrefixRankingSummary({ ranking, anySelected, t }) {
 
 function RoleFilterCheckboxes({ selectedRoles, onToggle, t }) {
   return (
-    <div className="flex gap-6 text-white py-4 px-8 justify-center rounded-lg bg-taupe-700/50 w-min text-xl">
+    <div className="flex gap-6 text-white py-4 px-8 justify-center rounded-lg bg-purple-700/50 w-min text-xl">
       {ROLE_KEYS.map((role) => (
         <label key={role} className="flex items-center gap-2 cursor-pointer">
           <input
@@ -761,6 +761,9 @@ function App() {
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
       <div className="flex justify-center items-center flex-col py-6">
+        <div className='w-full mb-4'>
+          <a href="https://bydoodle.github.io/ban-value/" className='p-2 bg-emerald-500/50 rounded-lg' target='_blank'>Check out my other <span className='text-blue-200' target='_blank'>project</span>!</a>
+        </div>
         <h2>{t('select-tournaments')}</h2>
         <p className="mt-2 text-center">{t('select-tournaments-desc')}</p>
       </div>
@@ -785,8 +788,8 @@ function App() {
         <p className="mt-2 text-center">{t('prefixes-suggestions-desc')}</p>
       </div>
 
-      <section className="flex flex-col xl:flex-row justify-center items-center xl:items-start gap-4 mb-8">
-        <div className='flex flex-col items-center gap-4 mb-8 w-full xl:w-min'>
+      <section className="flex flex-col xl:flex-row justify-center items-center xl:items-start gap-4 mb-6">
+        <div className='flex flex-col items-center gap-4 mb-6 w-full xl:w-min'>
           {ROLE_KEYS.map((role) => (
             <RolePairSelect
               key={role}
