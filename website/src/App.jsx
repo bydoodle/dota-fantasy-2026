@@ -5,6 +5,7 @@ import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions, Select } 
 import { ChevronUpDownIcon } from '@heroicons/react/16/solid'
 import { CheckIcon } from '@heroicons/react/20/solid'
 import { useTranslation } from 'react-i18next'
+import { IoIosWarning } from "react-icons/io";
 
 import bmc from './assets/bmc-logo-yellow.png'
 import steam from './assets/Steam_icon_logo.svg.png'
@@ -50,9 +51,12 @@ const SLOT_BACKGROUNDS = {
   green: 'bg-green-500/40',
 }
 
-// Stats that have no real data behind them yet get a generic explainer
-// instead of the multiplier UI actually meaning anything.
-const NO_DATA_STATS = new Set(['lotuses_grabbed', 'madstone_collected'])
+// Stats that have no usable data behind them get a generic explainer
+// instead of the multiplier UI actually meaning anything. tormentor_kills
+// is here because Valve credits it to everyone involved in the kill, not
+// just whoever landed the last hit - the parsed per-player numbers don't
+// reflect that, so the stat is treated as unusable rather than misleading.
+const NO_DATA_STATS = new Set(['lotuses_grabbed', 'madstone_collected', 'tormentor_kills'])
 
 const multipliers = {
   kills: 107,
@@ -68,7 +72,7 @@ const multipliers = {
   roshan_kills: 1172,
   teamfight_participation: 2124,
   stuns: 10,
-  tormentor_kills: 879,
+  // tormentor_kills: 879,
   courier_kills: 703,
   firstblood: 1934,
 }
@@ -129,6 +133,18 @@ const PREFIX_INFO = {
 // every render)
 // ---------------------------------------------------------------------------
 
+/**
+ * Reads a stat's raw per-game array for one color group, but always returns
+ * empty for stats in NO_DATA_STATS - regardless of what's actually parsed
+ * into the JSON for them. This is the single place that decides "this stat
+ * doesn't count", so both the table and the role rankings stay consistent
+ * even if the raw data still has (unreliable) numbers sitting in it.
+ */
+function getRawStatValues(statsForColor, stat) {
+  if (NO_DATA_STATS.has(stat)) return []
+  return statsForColor?.[stat] ?? []
+}
+
 function averageOf(values) {
   if (!values || values.length === 0) return null
   return values.reduce((sum, v) => sum + v, 0) / values.length
@@ -149,7 +165,7 @@ function getAggregatedStat(playerData, stat, selectedTournaments) {
   let games = 0
 
   selectedTournaments.forEach((tournamentId) => {
-    const values = playerData[tournamentId]?.stats?.[group]?.[stat] ?? []
+    const values = getRawStatValues(playerData[tournamentId]?.stats?.[group], stat)
     total += values.reduce((sum, v) => sum + v, 0)
     games += values.length
   })
@@ -173,7 +189,7 @@ function rankPlayersForRole({ role, slotStats, slotMultipliers, selectedTourname
         const statMultiplier = multipliers[stat] ?? 1
 
         const allValues = selectedTournaments.flatMap(
-          (tournamentId) => info[tournamentId]?.stats?.[color]?.[stat] ?? []
+          (tournamentId) => getRawStatValues(info[tournamentId]?.stats?.[color], stat)
         )
 
         const avg = averageOf(allValues)
@@ -768,7 +784,7 @@ function App() {
         <p className="mt-2 text-center">{t('select-tournaments-desc')}</p>
       </div>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 xl:flex w-full xl:justify-between mt-8 gap-2 lg:gap-4 pb-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 xl:flex w-full xl:justify-between gap-2 lg:gap-4 pb-6">
         {Object.entries(leagues).map(([leagueId, leagueInfo]) => (
           <TournamentCard
             key={leagueId}
@@ -813,6 +829,10 @@ function App() {
           {t('select-your-stats-desc')} <br />
           <span className="text-white/70">{t('select-your-stats-instruction')}</span>
         </p>
+        <div className='flex gap-2 text-yellow-500 items-center'>
+          <IoIosWarning />
+          <span>The data for Tormentor kills has been removed because it turned out that in 2025, Valve awarded players points not for the last hit, but for participating in the Tormentor kill in general. My apologies for the mistake.</span>
+        </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
           {ROLE_KEYS.map((role) => (
