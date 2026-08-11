@@ -1,8 +1,11 @@
 {
+    "dota-charity": "Dota Community for Charity",
+    "dota-charity-desc": "TeaGuvnor is live, raising money to support cancer care. Watch, share, and help the cause.",
+    "tormentor-data-desc": "The data for Tormentor kills has been removed because it turned out that in 2025, Valve awarded players points not for the last hit, but for participating in the Tormentor kill in general. My apologies for the mistake.",
+
     "select-tournaments": "Select tournaments",
     "select-tournaments-desc": "Choose tournaments you want to fetch data from",
     "total-matches-parsed": "Total matches parsed:",
-    
     "prefixes-suggestions": "Prefixes suggestions",
     "prefixes-suggestions-desc": "Choose your players and see the best prefixes based on selected tournaments",
     "prefix.red.name": "Crimson",

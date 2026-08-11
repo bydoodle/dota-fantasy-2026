@@ -776,10 +776,23 @@ function App() {
 
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
-      <div className="flex justify-center items-center flex-col py-6">
-        <div className='w-full mb-4'>
-          <a href="https://bydoodle.github.io/ban-value/" className='p-2 bg-emerald-500/50 rounded-lg' target='_blank'>Check out my other <span className='text-blue-200' target='_blank'>project</span>!</a>
-        </div>
+      <div className="flex justify-center items-center flex-col py-6 text-center">
+        <h2>{t("dota-charity")}</h2>
+        <p className="mt-2 text-center">{t("dota-charity-desc")}</p>
+      </div>
+      <div className="w-full flex items-center justify-center mb-8">
+        <iframe
+          src="https://player.twitch.tv/?channel=teaguvnor&parent=bydoodle.github.io"
+          className="min-w-80 w-2/3 h-60 md:h-80 lg:h-100 xl:h-120 2xl:h-140"
+          frameBorder="0"
+          allowFullScreen
+          scrolling="no"
+        />
+      </div>
+
+      <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+
+      <div className="flex justify-center items-center text-center flex-col py-6">
         <h2>{t('select-tournaments')}</h2>
         <p className="mt-2 text-center">{t('select-tournaments-desc')}</p>
       </div>
@@ -831,7 +844,7 @@ function App() {
         </p>
         <div className='flex gap-2 text-yellow-500 items-center'>
           <IoIosWarning />
-          <span>The data for Tormentor kills has been removed because it turned out that in 2025, Valve awarded players points not for the last hit, but for participating in the Tormentor kill in general. My apologies for the mistake.</span>
+          <span>{t("tormentor-data-desc")}</span>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">

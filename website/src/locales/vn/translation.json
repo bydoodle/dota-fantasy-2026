@@ -1,4 +1,8 @@
 {
+    "dota-charity": "Cộng đồng Dota vì hoạt động từ thiện",
+    "dota-charity-desc": "TeaGuvnor đang phát trực tiếp để gây quỹ hỗ trợ chăm sóc bệnh nhân ung thư. Hãy xem, chia sẻ và chung tay giúp đỡ.",
+    "tormentor-data-desc": "Dữ liệu về các lần hạ gục Tormentor đã được xóa vì hóa ra vào năm 2025, Valve trao điểm cho người chơi không phải dựa trên người thực hiện đòn đánh cuối cùng, mà dựa trên việc tham gia hạ gục Tormentor nói chung. Tôi xin lỗi vì sai sót này.",
+
     "select-tournaments": "Chọn giải đấu",
     "select-tournaments-desc": "Chọn các giải đấu bạn muốn lấy dữ liệu",
     "total-matches-parsed": "Tổng số trận đã phân tích:",

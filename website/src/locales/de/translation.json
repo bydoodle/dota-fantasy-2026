@@ -1,4 +1,8 @@
 {
+    "dota-charity": "Die Dota-Community für den guten Zweck",
+    "dota-charity-desc": "TeaGuvnor ist live und sammelt Spenden zur Unterstützung der Krebsversorgung. Schaut zu, teilt den Stream und unterstützt die Sache.",
+    "tormentor-data-desc": "Die Daten zu Tormentor-Kills wurden entfernt, da sich herausgestellt hat, dass Valve den Spielern im Jahr 2025 Punkte nicht für den letzten Treffer, sondern für die allgemeine Beteiligung am Töten des Tormentors vergeben hat. Ich entschuldige mich für den Fehler.",
+
     "select-tournaments": "Turniere auswählen",
     "select-tournaments-desc": "Wähle die Turniere aus, aus denen Daten geladen werden sollen",
     "total-matches-parsed": "Insgesamt analysierte Spiele:",

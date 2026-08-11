@@ -1,4 +1,8 @@
 {
+    "dota-charity": "Dota 社区公益活动",
+    "dota-charity-desc": "TeaGuvnor 正在直播，为癌症关怀筹款。观看直播、分享活动，帮助这项公益事业。",
+    "tormentor-data-desc": "Tormentor 击杀数据已被移除，因为事实证明，2025 年 Valve 并不是根据最后一击来给玩家积分，而是根据参与击杀 Tormentor 来给予积分。对于之前的错误，我深表歉意。",
+
     "select-tournaments": "选择赛事",
     "select-tournaments-desc": "选择你想要获取数据的赛事",
     "total-matches-parsed": "已解析比赛总数：",

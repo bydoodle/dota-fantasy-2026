@@ -1,4 +1,8 @@
 {
+    "dota-charity": "Comunidade de Dota pela Caridade",
+    "dota-charity-desc": "TeaGuvnor está ao vivo arrecadando fundos para apoiar o tratamento e cuidado de pessoas com câncer. Assista, compartilhe e ajude nessa causa.",
+    "tormentor-data-desc": "Os dados sobre abates de Tormentor foram removidos porque descobrimos que, em 2025, a Valve concedeu pontos aos jogadores não por darem o último golpe, mas por participarem do abate do Tormentor como um todo. Peço desculpas pelo erro.",
+
     "select-tournaments": "Selecionar torneios",
     "select-tournaments-desc": "Escolha os torneios dos quais deseja obter dados",
     "total-matches-parsed": "Total de partidas analisadas:",
