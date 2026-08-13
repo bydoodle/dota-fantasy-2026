@@ -34,9 +34,9 @@ const languages = [
 // Role position -> which 3 stat "slots" (and which color group each slot
 // pulls its options from) that role gets to pick.
 const ROLE_SLOT_COLORS = {
-  0: ['red', 'green', 'red'],
-  1: ['red', 'blue', 'green'],
-  2: ['blue', 'green', 'blue'],
+  0: ['red', 'green', 'red', 'green', 'red'],
+  1: ['red', 'blue', 'green', 'red', 'green'],
+  2: ['blue', 'green', 'blue', 'green', 'blue'],
 }
 
 const ROLE_NAME_KEYS = {
@@ -454,7 +454,7 @@ function StatSlot({ color, stat, multiplierValue, onStatChange, onMultiplierChan
 
 function RoleColumn({ role, selectedOption, setSelectedOption, selectedMultiplier, setSelectedMultiplier, rankings, t }) {
   const slotColors = ROLE_SLOT_COLORS[role]
-  const baseIndex = Number(role) * 3
+  const baseIndex = Number(role) * 5
 
   const setSlotStat = (slotIdx, value) => {
     setSelectedOption((prev) => {
@@ -644,8 +644,8 @@ function StatsTable({ rows, statFilter, onStatClick, t }) {
 // ---------------------------------------------------------------------------
 
 function App() {
-  const [selectedOption, setSelectedOption] = useState(Array(9).fill(null))
-  const [selectedMultiplier, setSelectedMultiplier] = useState(Array(9).fill(1))
+  const [selectedOption, setSelectedOption] = useState(Array(15).fill(null))
+  const [selectedMultiplier, setSelectedMultiplier] = useState(Array(15).fill(1))
   const [selectedTournaments, setSelectedTournaments] = useState(Object.keys(leagues))
   const [selectedRoles, setSelectedRoles] = useState([0, 1, 2])
   const [statFilter, setStatFilter] = useState('')
@@ -699,11 +699,11 @@ function App() {
   const rankingsByRole = useMemo(() => {
     const result = {}
     ROLE_KEYS.forEach((role) => {
-      const baseIndex = Number(role) * 3
+      const baseIndex = Number(role) * 5
       result[role] = rankPlayersForRole({
         role,
-        slotStats: selectedOption.slice(baseIndex, baseIndex + 3),
-        slotMultipliers: selectedMultiplier.slice(baseIndex, baseIndex + 3),
+        slotStats: selectedOption.slice(baseIndex, baseIndex + 5),
+        slotMultipliers: selectedMultiplier.slice(baseIndex, baseIndex + 5),
         selectedTournaments,
       })
     })
@@ -774,7 +774,7 @@ function App() {
         <LanguageSwitcher selectedLanguage={selectedLanguage} onChange={handleLanguageChange} />
       </header>
 
-      <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+      {/* <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
       <div className="flex justify-center items-center flex-col py-6 text-center">
         <h2>{t("dota-charity")}</h2>
@@ -788,7 +788,7 @@ function App() {
           allowFullScreen
           scrolling="no"
         />
-      </div>
+      </div> */}
 
       <hr className="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
 
