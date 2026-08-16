@@ -28,5 +28,11 @@
         "short_name": "1win Essence II",
         "link": "https://liquipedia.net/dota2/1win_Essence/2",
         "total_matches_parsed": 60
+    },
+    "19719": {
+        "name": "The International 2026",
+        "short_name": "TI 2026",
+        "link": "https://liquipedia.net/dota2/The_International/2026",
+        "total_matches_parsed": 80
     }
 }

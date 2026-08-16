@@ -797,7 +797,7 @@ function App() {
         <p className="mt-2 text-center">{t('select-tournaments-desc')}</p>
       </div>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 xl:flex w-full xl:justify-between gap-2 lg:gap-4 pb-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 w-full xl:justify-between gap-2 lg:gap-4 pb-6">
         {Object.entries(leagues).map(([leagueId, leagueInfo]) => (
           <TournamentCard
             key={leagueId}

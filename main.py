@@ -5,22 +5,6 @@ import os
 from collections import Counter
 
 PLAYERS_LIST = {
-# # Aurora Gaming
-    'Nightfall': {
-        'pos': 0
-    },
-    'Mikoto': {
-        'pos': 1
-    },
-    'Ws`': {
-        'pos': 0
-    },
-    'Mira': {
-        'pos': 2
-    },
-    'kaori': {
-        'pos': 2
-    },
 # # BoomBoys
     'Kiritych~': {
         'pos': 0
@@ -101,22 +85,6 @@ PLAYERS_LIST = {
     'Saksa': {
         'pos': 2
     },
-# # Xtreme Gaming
-    'Ame': {
-        'pos': 0
-    },
-    'NothingToSay': {
-        'pos': 1
-    },
-    'Xxs': {
-        'pos': 0
-    },
-    'fy': {
-        'pos': 2
-    },
-    'xNova': {
-        'pos': 2
-    },
 # # Team Spirit
     "Yatoro": {
         'pos': 0
@@ -164,92 +132,7 @@ PLAYERS_LIST = {
     },
     'GH': {
         'pos': 2
-    },
-# # HULIGANI
-    'ssnovv1': {
-        'pos': 0
-    },
-    # 'Mirage`雨': {
-    #     'pos': 1
-    # },
-    'Corrupted': {
-        'pos': 0
-    },
-    # 'Armel': {
-    #     'pos': 2
-    # },
-    'RESPECT': {
-        'pos': 2
-    },
-    'sayuw': {
-        'pos': 2
-    },
-# # Team Resilience
-
-# # Vici Gaming
-    'shiro': {
-        'pos': 0
-    },
-    'Xm': {
-        'pos': 1
-    },
-    'Bach': {
-        'pos': 0
-    },
-    'XinQ': {
-        'pos': 2
-    },
-    'y`': {
-        'pos': 2
-    },
-# # OG
-    'Natsumi': {
-        'pos': 0
-    },
-    'Yopaj-': {
-        'pos': 1
-    },
-    'Raven': {
-        'pos': 0
-    },
-    'TIMS': {
-        'pos': 2
-    },
-    'skem': {
-        'pos': 2
-    },
-# # LGD Gaming
-    'Yuma': {
-        'pos': 0
-    },
-    'TaiLung': {
-        'pos': 1
-    },
-    'Wisper': {
-        'pos': 0
-    },
-    'Thiolicor': {
-        'pos': 2
-    },
-    'KingJungles': {
-        'pos': 2
-    },
-# # GamerLegion
-    'Ghost': {
-        'pos': 0
-    },
-    'RCY': {
-        'pos': 1
-    },
-    'Fayde': {
-        'pos': 0
-    },
-    'Bignum': {
-        'pos': 2
-    },
-    'Speeed': {
-        'pos': 2
-    },
+    }
 }
 
 with open("heroes.json", "r", encoding="utf-8") as f:
@@ -332,7 +215,7 @@ for league_id in leagues_ids:
 
         time.sleep(1.2)
         
-        max_retries = 3
+        max_retries = 5
         for attempt in range(max_retries):
             if "players" in match_r:
                 break
