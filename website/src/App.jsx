@@ -339,7 +339,7 @@ function SocialLinks() {
       src: reddit,
       alt: 'Reddit thread',
     },
-    { href: 'https://github.com/bydoodle/dota2fantasy', src: github, alt: 'GitHub repository' },
+    { href: 'https://github.com/bydoodle/dota-fantasy-2026', src: github, alt: 'GitHub repository' },
   ]
 
   return (
